@@ -1,0 +1,41 @@
+subprojects {
+    apply plugin: 'java'
+
+
+    version = '1.0.0'
+    group 'cn.pc.sz'
+    sourceCompatibility = '11'
+
+   [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+    configurations {
+        developmentOnly
+        runtimeClasspath {
+            extendsFrom developmentOnly
+        }
+        compileonly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://mirrors.huaweicloud.com/repository/maven/'
+        }
+        maven{
+            url'https://developer.huawei.com/repo/'
+        }
+    }
+
+
+    dependencies {
+
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+

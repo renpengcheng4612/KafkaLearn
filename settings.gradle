@@ -1,0 +1,5 @@
+rootProject.name = 'KafkaLearn'
+include 'KafkaSpringModule'
+include 'KafkaSimpleModule'
+
+
