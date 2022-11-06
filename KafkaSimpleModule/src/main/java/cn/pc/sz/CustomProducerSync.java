@@ -18,7 +18,7 @@ public class CustomProducerSync {
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"172.20.10.8:9092,172.20.10.9:9092,172.20.10.10:9092,172.20.10.10:9092");
 
         // 指定对应的key和value的序列化类型 key.serializer
-//        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
+        // properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
 
