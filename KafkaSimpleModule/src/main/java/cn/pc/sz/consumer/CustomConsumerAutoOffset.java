@@ -14,7 +14,7 @@ public class CustomConsumerAutoOffset {
 
     public static void main(String[] args) {
 
-        // 0 配置
+        // 配置
         Properties properties = new Properties();
 
         // 连接 bootstrap.servers
@@ -43,9 +43,7 @@ public class CustomConsumerAutoOffset {
 
         // 3 消费数据
         while (true){
-
             ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofSeconds(1));
-
             for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
                 System.out.println(consumerRecord);
             }

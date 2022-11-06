@@ -27,10 +27,10 @@ public class CustomConsumer01 {
         // 配置消费者组id
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
 
-        // 1 创建一个消费者  "", "hello"
+        // 1 创建一个消费者
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(properties);
 
-        // 2 订阅主题 first
+        // 2 订阅主题  填写主题名
         ArrayList<String> topics = new ArrayList<>();
         topics.add("chinaclear3");
         kafkaConsumer.subscribe(topics);

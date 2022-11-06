@@ -9,7 +9,7 @@ public class MyPartitioner implements Partitioner {
     @Override
     public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
 
-        // 获取数据 atguigu  hello
+        // 获取数据
         String msgValues = value.toString();
 
         int partition;

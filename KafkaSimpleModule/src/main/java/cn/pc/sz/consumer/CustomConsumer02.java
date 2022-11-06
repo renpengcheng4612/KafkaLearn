@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Properties;
 
-public class CustomConsumer03 {
+public class CustomConsumer02 {
 
     public static void main(String[] args) {
 
@@ -27,19 +27,17 @@ public class CustomConsumer03 {
         // 配置消费者组id
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
 
-        // 1 创建一个消费者  "", "hello"
+        // 1 创建一个消费者
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(properties);
 
-        // 2 订阅主题 first
+        // 2 订阅主题
         ArrayList<String> topics = new ArrayList<>();
         topics.add("chinaclear3");
         kafkaConsumer.subscribe(topics);
 
         // 3 消费数据
         while (true) {
-
             ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofSeconds(1));
-
             for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
                 System.out.println(consumerRecord);
             }

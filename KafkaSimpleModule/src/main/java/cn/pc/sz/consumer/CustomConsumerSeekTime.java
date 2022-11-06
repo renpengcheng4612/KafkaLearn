@@ -38,7 +38,6 @@ public class CustomConsumerSeekTime {
         //  保证分区分配方案已经制定完毕
         while (assignment.size() == 0){
             kafkaConsumer.poll(Duration.ofSeconds(1));
-
             assignment = kafkaConsumer.assignment();
         }
 
@@ -49,22 +48,16 @@ public class CustomConsumerSeekTime {
         for (TopicPartition topicPartition : assignment) {
             topicPartitionLongHashMap.put(topicPartition,System.currentTimeMillis() - 1 * 24 * 3600 * 1000);
         }
-
         Map<TopicPartition, OffsetAndTimestamp> topicPartitionOffsetAndTimestampMap = kafkaConsumer.offsetsForTimes(topicPartitionLongHashMap);
 
         // 指定消费的offset
         for (TopicPartition topicPartition : assignment) {
-
             OffsetAndTimestamp offsetAndTimestamp = topicPartitionOffsetAndTimestampMap.get(topicPartition);
-
             kafkaConsumer.seek(topicPartition,offsetAndTimestamp.offset());
         }
-
         // 3  消费数据
         while (true){
-
             ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofSeconds(1));
-
             for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
 
                 System.out.println(consumerRecord);

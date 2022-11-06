@@ -43,7 +43,6 @@ public class CustomConsumerSeek {
         //  保证分区分配方案已经制定完毕
         while (assignment.size() == 0){
             kafkaConsumer.poll(Duration.ofSeconds(1));
-
             assignment = kafkaConsumer.assignment();
         }
 
@@ -54,11 +53,8 @@ public class CustomConsumerSeek {
 
         // 3  消费数据
         while (true){
-
             ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofSeconds(1));
-
             for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
-
                 System.out.println(consumerRecord);
             }
         }

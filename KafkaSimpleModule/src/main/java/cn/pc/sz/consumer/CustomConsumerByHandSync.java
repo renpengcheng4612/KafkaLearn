@@ -40,16 +40,12 @@ public class CustomConsumerByHandSync {
 
         // 3 消费数据
         while (true) {
-
             ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofSeconds(1));
-
             for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
                 System.out.println(consumerRecord);
             }
-
             // 手动 同步提交offset
-         //   kafkaConsumer.commitSync();
-
+          //   kafkaConsumer.commitSync();
             // 手动异步期交offset
             kafkaConsumer.commitAsync();
         }
