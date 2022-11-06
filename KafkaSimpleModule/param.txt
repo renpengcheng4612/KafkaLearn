@@ -1,0 +1,9 @@
+
+// batch.size：批次大小，默认 16K
+//  properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
+//  linger.ms：等待时间，默认 0
+//  properties.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+//  设置 acks
+//  properties.put(ProducerConfig.ACKS_CONFIG, "all");
+//  重试次数 retries，默认是 int 最大值，2147483647
+//  properties.put(ProducerConfig.RETRIES_CONFIG, 3);

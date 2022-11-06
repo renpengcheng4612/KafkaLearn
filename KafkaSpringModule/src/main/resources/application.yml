@@ -1,0 +1,17 @@
+server:
+  port: 9090
+
+# spring 的配置
+spring:
+  profiles:
+    active: local
+  application:
+    name: kafka-spring-module
+  devtools:
+    restart:
+      enabled: true
+      exclude: static
+
+logging:
+  level:
+    root: info

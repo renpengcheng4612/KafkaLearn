@@ -1,0 +1,15 @@
+server:
+  port: 8686
+
+
+spring:
+    kafka:
+      producer:
+          bootstrap-servers: 172.20.10.8:9092,172.20.10.9:9092,172.20.10.10:9092
+          key-serializer: org.apache.kafka.common.serialization.StringSerializer
+          value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      consumer:
+          bootstrap-servers: 172.20.10.8:9092,172.20.10.9:9092,172.20.10.10:9092
+          key-serializer: org.apache.kafka.common.serialization.StringSerializer
+          group-id:
+

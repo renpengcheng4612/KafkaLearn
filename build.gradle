@@ -1,7 +1,25 @@
+buildscript {
+    ext {
+        springBootVersion = '2.5.5'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://mirrors.huaweicloud.com/repository/maven/'
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+
+
+
 subprojects {
     apply plugin: 'java'
-
-
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
     version = '1.0.0'
     group 'cn.pc.sz'
     sourceCompatibility = '11'
@@ -30,7 +48,17 @@ subprojects {
 
 
     dependencies {
+        implementation 'commons-pool:commons-pool:1.5.4'
+        implementation 'io.opentracing.contrib:opentracing-spring-jaeger-web-starter:3.3.1'
+        //compileonly 'org.projectlombok:lombok:1.18.10'
 
+        annotationProcessor 'org.projectlombok:lombok:1.18.10'
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+        testCompileOnly 'org.projectlombok:lombok:1.18.10'
+
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.10'
+        testImplementation 'org.junit.platform:junit-platform-launcher:1.6.2'
+        testImplementation 'org.mockito:mockito-core:3.6.28'
     }
 
     test {
