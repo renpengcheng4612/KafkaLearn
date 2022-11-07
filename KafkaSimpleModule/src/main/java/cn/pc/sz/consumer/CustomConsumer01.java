@@ -1,5 +1,6 @@
 package cn.pc.sz.consumer;
 
+import cn.pc.sz.enmu.KafkaPropertiesEnum;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -18,7 +19,7 @@ public class CustomConsumer01 {
         Properties properties = new Properties();
 
         // 连接 bootstrap.servers
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.20.10.8:9092,172.20.10.9:9092,172.20.10.10:9092");
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaPropertiesEnum.BOOTSTRAP_SERVERS_CONFIG_VALUE_2.getValue());
 
         // 反序列化
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
@@ -37,9 +38,7 @@ public class CustomConsumer01 {
 
         // 3 消费数据
         while (true) {
-
             ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofSeconds(1));
-
             for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
                 System.out.println(consumerRecord);
             }

@@ -34,7 +34,7 @@ bin/kafka-console-producer.sh
  --bootstrap-server <String: server toconnect to>  连接的 Kafka Broker主机名称和端口号。
  --topic <String: topic>  操作的 topic名称。
 
-./bin/kafka-console-producer.sh  --bootstrap-server 172.20.10.8:9092   --topic first
+
 
 bin/kafka-console-consumer.sh
  参数  描述
