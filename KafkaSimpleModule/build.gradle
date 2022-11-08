@@ -1,3 +1,6 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
+}
 archivesBaseName = "kafka-simple-module"
 jar.enabled = true
 bootJar.enabled = false
@@ -10,18 +13,29 @@ dependencies {
     implementation 'org.apache.kafka:kafka-clients:3.0.0'
     testImplementation 'org.apache.kafka:kafka-clients:3.0.0'
 
-  //   implementation 'org.projectlombok:lombok:1.18.20'
+    implementation 'org.projectlombok:lombok:1.18.20'
+
     // apache 工具类
-   // implementation 'commons-codec:commons-codec:1.11'
-   // implementation 'org.apache.commons:commons-lang3:3.4'
-   // implementation 'org.apache.commons:commons-io:1.3.2'
+    // implementation 'commons-codec:commons-codec:1.11'
+    // implementation 'org.apache.commons:commons-lang3:3.4'
+    // implementation 'org.apache.commons:commons-io:1.3.2'
+
+    implementation 'org.junit.platform:junit-platform-launcher:1.6.2'
 
     implementation 'com.google.guava:guava:30.0-jre'
     testImplementation 'com.google.guava:guava:30.0-jre'
 
     // 增加test 相关的依赖
     testImplementation 'junit:junit:4.13.2'
-    testImplementation  'org.junit.jupiter:junit-jupiter:5.7.0'
-    implementation 'org.junit.platform:junit-platform-launcher:1.6.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
     testImplementation 'org.junit.platform:junit-platform-launcher:1.6.2'
+
+    testImplementation 'org.apache.kafka:kafka-clients:3.0.0'
+
+    testImplementation 'org.apache.kafka:kafka-clients_2.13:2.7.1'
+}
+
+
+test {
+    useJUnitPlatform()
 }
