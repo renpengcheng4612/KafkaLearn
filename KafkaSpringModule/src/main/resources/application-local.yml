@@ -5,6 +5,12 @@ server:
 spring:
   kafka:
     bootstrap-servers: 172.20.10.8:9092,172.20.10.9:9092,172.20.10.10:9092
+    # 消費者监听得的topic 不存在时项目启动不报错
+    listener.missinng-topics-fatal: false
+    # 在监听容器中运行的线程数：
+    listener.concurrency: 10
+    # 轮询超时时间：
+    listener.pol.timeout: 5000
     producer:
       # 消息发送次数
       retries: 0

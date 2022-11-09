@@ -1,4 +1,4 @@
-package cn.pc.sz;
+package cn.pc.sz.producer;
 
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -20,13 +20,13 @@ public class CustomProducerCallback {
            // 4. 调用 send 方法,发送消息
         for (int i = 0; i < 100; i++) {
              // 添加回调
-            kafkaProducer.send(new ProducerRecord<>("chinaclear3", "sz " + i), new Callback() {
+            kafkaProducer.send(new ProducerRecord<>("4a", "sz " + i), new Callback() {
                 // 该方法在 Producer 收到 ack 时调用，为异步调用
                 @Override
                 public void onCompletion(RecordMetadata metadata, Exception exception) {
                     if (exception == null) {
                  // 没有异常,输出信息到控制台
-                        System.out.println(" 主 题 ： " + metadata.topic() + "->" + "分区：" + metadata.partition());
+                        System.out.println("主题 ： " + metadata.topic() + "->" + "分区：" + metadata.partition());
                     } else {
                   // 出现异常打印
                         exception.printStackTrace();

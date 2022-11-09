@@ -8,7 +8,8 @@ import org.springframework.kafka.support.Acknowledgment;
 @Configuration
 public class KafkaConsumer {
 
-    //如果bean的方法中有使用注解@KafkaListener，则会在KafkaListenerAnnotationBeanPostProcessor#postProcessAfterInitialization 方法中做相应的处理
+    //如果bean的方法中有使用注解@KafkaListener，
+    // 则会在KafkaListenerAnnotationBeanPostProcessor#postProcessAfterInitialization 方法中做相应的处理
     @KafkaListener(topics = "chinaclear", groupId = "test")
     public void consumerTopic(String msg) {
         System.out.println("收到消息：" + msg);
@@ -23,12 +24,12 @@ public class KafkaConsumer {
      * },concurrency = "6")
      * concurrency就是同组下的消费者个数，就是并发消费数，必须小于等于分区总数
      */
-    @KafkaListener(topics = "my-replicated-topic", groupId = "test")
-    public void listenZhugeGroup(ConsumerRecord<String, String> record, Acknowledgment ack) {
+    @KafkaListener(topics = "4a", groupId = "test1")
+    public void listen4AGroup(ConsumerRecord<String, String> record, Acknowledgment ack) {
         String value = record.value();
-        System.out.println(value);
+        System.out.println("==============topics = 4a, groupId = test1 消费的值为 :================"+value);
         System.out.println(record);
         //手动提交offset
-        //ack.acknowledge();
+     //   ack.acknowledge();
     }
 }

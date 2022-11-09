@@ -4,7 +4,6 @@ import org.junit.Test;
 
 public class KafkaPropertiesEnumTest {
 
-
     @Test
     public void test1() {
         System.out.println(KafkaPropertiesEnum.BOOTSTRAP_SERVERS_CONFIG_VALUE_1);

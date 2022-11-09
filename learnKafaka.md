@@ -145,13 +145,35 @@ I/O模型的poll或select，使用一个线程来同时管理多个socket连接�
 
 对于新版本consumer Kafka
 1.0.0而言，是一个双线程Java进程，创建KafkaConsumer的线程被称为用户主线程，同时consumer在后台会创建一个心跳线程。KafkaConsumer的poll方法在用户主线程中运行，这也表明消费者组rebalance、
-消息获取、coordinator管理、异步任务结果的处理甚至位移提交等操作都运行在用户主线程中
+消息获取、coordinator管理、异步任务结果的处理甚至位移提交等操作都运行在用户主线程中；
 
 ### 漏消费和重复消费：
 
 ![img_11.png](img_11.png)
 
+重复消费涉及到的相关参数：
 
+* enable.auto.commit：表示消费者会周期性自动提交消费的offset。默认值true。
+
+* auto.commit.interval.ms：在enable.auto.commit为true的情况下， 自动提交的间隔。默认值5秒。
+
+* max.poll.records：单次消费者拉取的最大数据条数，默认值500。
+
+* max.poll.interval.ms：表示若在阈值时间之内消费者没有消费完上一次poll的消息，consumer client会主动向coordinator发起LeaveGroup请求，触发Rebalance；然后consumer重新发送JoinGroup请求。
+
+* session.timeout.ms：group Coordinator检测consumer发生崩溃所需的时间。在这个时间内如果Coordinator未收到Consumer的任何消息，那Coordinator就认为Consumer挂了。默认值10秒。
+
+* heartbeat.interval.ms：标识Consumer给Coordinator发一个心跳包的时间间隔。heartbeat.interval.ms越小，发的心跳包越多。默认值3秒。
+
+> 原因1：消费者宕机、重启或者被强行kill进程，导致消费者消费的offset没有提交。
+> 原因2：设置enable.auto.commit为true，如果在关闭消费者进程之前，取消了消费者的订阅，则有可能部分offset没提交，下次重启会重复消费。
+> 原因3：消费后的数据，当offset还没有提交时，Partition就断开连接。比如，通常会遇到消费的数据，处理很耗时，导致超过了Kafka的session timeout.ms时间，那么就会触发reblance重平衡，此时可能存在消费者offset没提交，会导致重平衡后重复消费。
+
+重复消费的解决方法:
+
+* 提高消费者的处理速度。例如：对消息处理中比较耗时的步骤可通过异步的方式进行处理、利用多线程处理等。在缩短单条消息消费的同时，根据实际场景可将max.poll.interval.ms值设置大一点，避免不必要的Rebalance。可根据实际消息速率适当调小max.poll.records的值。
+
+* 引入消息去重机制。例如：生成消息时，在消息中加入唯一标识符如消息id等。在消费端，可以保存最近的max.poll.records条消息id到redis或mysql表中，这样在消费消息时先通过查询去重后，再进行消息的处理。
 
 ## <a id="title2_sub1" name="title2_sub1"></a> 2.Spring Kafka 介绍
 
@@ -210,32 +232,31 @@ spring:
       client-id: 1
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
 ```
 
 ### Configuring Topics
-
 如果你在应用上下文中定义了一个KafkaAdmin的bean,它可以自动向代理添加主题，只需要向每个主题添加NewTopic的bean在应用中的上下文：
 
 ```java
-@Bean
-public KafkaAdmin admin(){
-        Map<String, Object>  configs=new HashMap();
-        configs.put(AdminClientConfig.BOOTSTRAP_SERVER_CONFIG,"localhost:9092");
-        reture new KafkaAdmin(configs);
+        @Bean
+        public KafkaAdmin admin(){
+           Map<String, Object>  configs=new HashMap();
+           configs.put(AdminClientConfig.BOOTSTRAP_SERVER_CONFIG,"localhost:9092");
+           reture new KafkaAdmin(configs);
         }
 
-@Bean
-public NewTopic topic1(){
-        return TopicBuilder.name("topic1")
-        .partition(1)
-        .replicas(1)
-        .build();
+        
+        
+        @Bean
+        public NewTopic topic1(){
+            return TopicBuilder.name("topic1")
+            .partition(1)
+            .replicas(1)
+            .build();
         }
-
 ```
 
-在springBoot 项目中，KafkaAdmin 会被自动注册，所以我们只需要NewTopic 的bean 即可：
+在springBoot 项目中，KafkaAdmin 会被自动注册，所以我们只需要NewTopic的bean即可
 
 ### 发送消息 kafkaTemplate:
 
@@ -243,12 +264,12 @@ kafkaTemplate 包装了一个生产者，并提供了方便的方法来发送数
 
 ```java
 
-     /**
-      * Send the data to the default topic with no key or partition.
-      * @param data The data.
-      * @return a Future for the {@link SendResult}.
-      */
-      ListenableFuture<SendResult<K, V>>sendDefault(V data);
+        /**
+         * Send the data to the default topic with no key or partition.
+         * @param data The data.
+         * @return a Future for the {@link SendResult}.
+         */
+        ListenableFuture<SendResult<K, V>>sendDefault(V data);
 
         /**
          * Send the data to the default topic with the provided key and no partition.
@@ -309,8 +330,7 @@ kafkaTemplate 包装了一个生产者，并提供了方便的方法来发送数
 以上方法返回一个ListenableFuture<SendResult<K,V>> 监听器
 
 ### 接收消息 :
-
-可以配置MessageListenerContainer 并提供消息监听器或使用@KafkaListener 注解来接收消息：
+>可以配置MessageListenerContainer 并提供消息监听器或使用@KafkaListener 注解来接收消息：
 
 #### MessageListenerContainer:
 
@@ -341,6 +361,8 @@ public void listenZhugeGroup(ConsumerRecord<String, String> record,Acknowledgmen
         //ack.acknowledge();
         }   
 ```
+
+
 
 ## 3).ZT  kafka 封装包的设计及使用：
 

@@ -2,7 +2,6 @@ package cn.pc.sz.enmu;
 
 
 public enum KafkaPropertiesEnum {
-
     /**
      * 连接地址
      */

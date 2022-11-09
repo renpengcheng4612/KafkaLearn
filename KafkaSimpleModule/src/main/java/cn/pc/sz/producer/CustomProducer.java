@@ -1,4 +1,4 @@
-package cn.pc.sz;
+package cn.pc.sz.producer;
 
 import java.util.Properties;
 
