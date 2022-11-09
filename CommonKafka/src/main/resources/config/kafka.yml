@@ -1,0 +1,8 @@
+﻿spring:
+  kafka:
+    bootstrap-servers:${ZT_KAFKA_HOST:172.20.10.8:9092}
+    # properties:
+    #  sasl.mechanism: PLAIN
+    #  sasl.jaas.conifg: org.apache.kafka.common.security.plain.PlainLoginModule required username='kafkaUser'  password='kafka#Password';
+    #  security.protocol: SASL_PLAINTEXT
+    #  enable-auto-commit: false

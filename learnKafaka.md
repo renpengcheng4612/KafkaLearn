@@ -1,26 +1,23 @@
 目录：
 
-- <a href= "#title2">BPM ZT Kafka 接入</a>
+- <a href= "#title2">BPM ZT Kafka 封装包接入</a>
     - <a href="#title2_sub1">1.Kafka 工作原理</a>
     - <a href="#title2_sub1">2.Spring Kafka 介绍</a>
     - <a href="#title2_sub1">3.ZT kafka封装包的设计及使用</a>
 
-# <a id="title2" name="title2"></a>BPM ZT Kafka 接入
+# <a id="title2" name="title2"></a>BPM ZT Kafka 封装包接入
 
 ## <a id="title2_sub1" name="title2_sub1"></a> 1.Kafaka 工作原理
 
 ## 1).kafka 的定义：
 
 ### 消息队列的两种模式：
+
 ![img_12.png](img_12.png)
-1).点对点模式（一对一，消费者主动拉取数据，消息收到后消息清除）
-点对点模型通常是一个基于拉取或者轮询的消息传送模型，这种模型从队列中请求信息，
-而不是将消息推送到客户端。这个模型的特点是发送到队列的消息被一个且只有一个接收者
+1).点对点模式（一对一，消费者主动拉取数据，消息收到后消息清除） 点对点模型通常是一个基于拉取或者轮询的消息传送模型，这种模型从队列中请求信息， 而不是将消息推送到客户端。这个模型的特点是发送到队列的消息被一个且只有一个接收者
 接收处理，即使有多个消息监听者也是如此。
 
-2).发布/订阅模式（一对多，数据生产后，推送给所有订阅者）
-发布订阅模型则是一个基于推送的消息传送模型。发布订阅模型可以有多种不同的订阅
-者，临时订阅者只在主动监听主题时才接收消息，而持久订阅者则监听主题的所有消息，即
+2).发布/订阅模式（一对多，数据生产后，推送给所有订阅者） 发布订阅模型则是一个基于推送的消息传送模型。发布订阅模型可以有多种不同的订阅 者，临时订阅者只在主动监听主题时才接收消息，而持久订阅者则监听主题的所有消息，即
 使当前订阅者不可用，处于离线状态。
 
 ### Kafka 的基本介绍：
@@ -45,12 +42,15 @@ kafka 是一个开源的分布式事件流平台（Event Streaming Platform）�
 ### 2).kafka 的应用场景：
 
 ### 缓存/消峰：有助于控制和优化数据流经过系统的速度，解决生产消息和消费消息的处理速度不一致的情况。
+
 ![img_13.png](img_13.png)
 
 ### 解耦： 允许你独立的扩展或修改两边的处理过程，只要确保它们遵守同样的接口约束。
+
 ![img_14.png](img_14.png)
 
 ### 异步通信：
+
 ![img_15.png](img_15.png)
 
 ## 3).kafka 的组成：
@@ -86,9 +86,8 @@ partions主题分区数:kafka通过分区策略，将不同的分区分配在一
 
 ### 生产者发送流程：
 
-在消息发送的过程中，涉及到了两个线程 ——main 线程和 Sender 线程。在main线程中创建了一个双端队列 
-RecordAccumulator。main线程将消息发送给 RecordAccumulator，
-Sender线程不断从 RecordAccumulator 中拉取消息发送到 Kafka Broker。
+在消息发送的过程中，涉及到了两个线程 ——main 线程和 Sender 线程。在main线程中创建了一个双端队列 RecordAccumulator。main线程将消息发送给 RecordAccumulator， Sender线程不断从
+RecordAccumulator 中拉取消息发送到 Kafka Broker。
 
 ![img_3.png](img_3.png)
 
@@ -96,21 +95,18 @@ Sender线程不断从 RecordAccumulator 中拉取消息发送到 Kafka Broker。
 * 2）producer 将消息发送给该 leader
 * 3）leader 将消息写入本地 log
 * 4）followers 从 leader pull 消息，写入本地 log 后向 leader 发送 ACK
-* 5）leader 收到所有 ISR 中的 replication 的 ACK 后，增加 HW（high watermark，最后 commit
-  的 offset）并向 producer 发送 ACK
+* 5）leader 收到所有 ISR 中的 replication 的 ACK 后，增加 HW（high watermark，最后 commit 的 offset）并向 producer 发送 ACK
 
 • batch.size ：只有数据积累到batch.size之后，sender才会发送数据。默认16k
 
 • linger.ms ：如果数据迟迟未达到batch.size，sender等待linger.time之后就会 发送数据。单位ms，默认值是0ms，表示没有延迟。
 
-
 ### acks 应答级别：
 
 ![img_4.png](img_4.png)
 
-acks=0，生产者发送过来数据就不管了，可靠性差，效率高；
-acks=1，生产者发送过来数据Leader 应答，可靠性中等，效率中等；
-acks=-1，生产者发送过来数据Leader 和ISR 队列里面所有Follwer 应答，可靠性高 ，效率低；
+acks=0，生产者发送过来数据就不管了，可靠性差，效率高； acks=1，生产者发送过来数据Leader 应答，可靠性中等，效率中等； acks=-1，生产者发送过来数据Leader 和ISR 队列里面所有Follwer 应答，可靠性高
+，效率低；
 
 > 在生产环境中， acks=0 很少使用；acks=1， 一般用于传输普通日志 ， 允许丢个别数据；acks=-1，一般用于传输和钱相关的数据，对可靠性要求比较高的场景 。
 
@@ -159,9 +155,11 @@ I/O模型的poll或select，使用一个线程来同时管理多个socket连接�
 
 * max.poll.records：单次消费者拉取的最大数据条数，默认值500。
 
-* max.poll.interval.ms：表示若在阈值时间之内消费者没有消费完上一次poll的消息，consumer client会主动向coordinator发起LeaveGroup请求，触发Rebalance；然后consumer重新发送JoinGroup请求。
+* max.poll.interval.ms：表示若在阈值时间之内消费者没有消费完上一次poll的消息，consumer
+  client会主动向coordinator发起LeaveGroup请求，触发Rebalance；然后consumer重新发送JoinGroup请求。
 
-* session.timeout.ms：group Coordinator检测consumer发生崩溃所需的时间。在这个时间内如果Coordinator未收到Consumer的任何消息，那Coordinator就认为Consumer挂了。默认值10秒。
+* session.timeout.ms：group
+  Coordinator检测consumer发生崩溃所需的时间。在这个时间内如果Coordinator未收到Consumer的任何消息，那Coordinator就认为Consumer挂了。默认值10秒。
 
 * heartbeat.interval.ms：标识Consumer给Coordinator发一个心跳包的时间间隔。heartbeat.interval.ms越小，发的心跳包越多。默认值3秒。
 
@@ -171,7 +169,9 @@ I/O模型的poll或select，使用一个线程来同时管理多个socket连接�
 
 重复消费的解决方法:
 
-* 提高消费者的处理速度。例如：对消息处理中比较耗时的步骤可通过异步的方式进行处理、利用多线程处理等。在缩短单条消息消费的同时，根据实际场景可将max.poll.interval.ms值设置大一点，避免不必要的Rebalance。可根据实际消息速率适当调小max.poll.records的值。
+*
+
+提高消费者的处理速度。例如：对消息处理中比较耗时的步骤可通过异步的方式进行处理、利用多线程处理等。在缩短单条消息消费的同时，根据实际场景可将max.poll.interval.ms值设置大一点，避免不必要的Rebalance。可根据实际消息速率适当调小max.poll.records的值。
 
 * 引入消息去重机制。例如：生成消息时，在消息中加入唯一标识符如消息id等。在消费端，可以保存最近的max.poll.records条消息id到redis或mysql表中，这样在消费消息时先通过查询去重后，再进行消息的处理。
 
@@ -191,7 +191,7 @@ spring:
   kafka:
     #kafka 服务地址，可以有多个用,隔开
     bootstrap-servers:localhost: 9002
-    # 消費者监听得的topic 不存在时项目启动不报错
+    # 消費者监听得的 topic 不存在时项目启动不报错
     listener.missinng-topics-fatal: false
     # 在监听容器中运行的线程数：
     listener.concurrency: 10
@@ -235,24 +235,29 @@ spring:
 ```
 
 ### Configuring Topics
+
 如果你在应用上下文中定义了一个KafkaAdmin的bean,它可以自动向代理添加主题，只需要向每个主题添加NewTopic的bean在应用中的上下文：
 
 ```java
         @Bean
-        public KafkaAdmin admin(){
-           Map<String, Object>  configs=new HashMap();
-           configs.put(AdminClientConfig.BOOTSTRAP_SERVER_CONFIG,"localhost:9092");
-           reture new KafkaAdmin(configs);
+public KafkaAdmin admin(){
+        Map<String, Object>  configs=new HashMap();
+        configs.put(AdminClientConfig.BOOTSTRAP_SERVER_CONFIG,"localhost:9092");
+        reture new KafkaAdmin(configs);
         }
 
-        
-        
-        @Bean
-        public NewTopic topic1(){
-            return TopicBuilder.name("topic1")
-            .partition(1)
-            .replicas(1)
-            .build();
+
+@Bean
+public NewTopic topic1(){
+        return TopicBuilder.name("topic1")
+        .partition(1)
+        .replicas(1)
+        .build();
+        }
+
+@Bean
+public NewTopic topic2(){
+        return new NewTopic("topic2",1,(short)1);
         }
 ```
 
@@ -264,11 +269,11 @@ kafkaTemplate 包装了一个生产者，并提供了方便的方法来发送数
 
 ```java
 
-        /**
-         * Send the data to the default topic with no key or partition.
-         * @param data The data.
-         * @return a Future for the {@link SendResult}.
-         */
+/**
+ * Send the data to the default topic with no key or partition.
+ * @param data The data.
+ * @return a Future for the {@link SendResult}.
+ */
         ListenableFuture<SendResult<K, V>>sendDefault(V data);
 
         /**
@@ -330,7 +335,8 @@ kafkaTemplate 包装了一个生产者，并提供了方便的方法来发送数
 以上方法返回一个ListenableFuture<SendResult<K,V>> 监听器
 
 ### 接收消息 :
->可以配置MessageListenerContainer 并提供消息监听器或使用@KafkaListener 注解来接收消息：
+
+> 可以配置MessageListenerContainer 并提供消息监听器或使用@KafkaListener 注解来接收消息：
 
 #### MessageListenerContainer:
 
@@ -349,8 +355,8 @@ kafka 提供了两个 MessageListenerContainer 来实现
 public void consumerTopic(String msg){
         System.out.println("收到消息："+msg);
         }
-        
-        
+
+
 // 使用consumerRecord<?,?> 作为接收消息的参数时除了可有Acknowledgmen 对象外，不能有其他参数
 @KafkaListener(topics = "my-replicated-topic", groupId = "test")
 public void listenZhugeGroup(ConsumerRecord<String, String> record,Acknowledgment ack){
@@ -362,7 +368,44 @@ public void listenZhugeGroup(ConsumerRecord<String, String> record,Acknowledgmen
         }   
 ```
 
+@KafkaListener 还可以作用在class 类上:
+该注解作用于类上时,类中的方法必须用 @KafkaHandler 注解，在传递消息时，将使用转换后的消息有效负载类型来确定调用那个方法。方式如下：
 
+```java
+
+@KafkaListener(id = "myId", topics = "myTopic")
+public class Myclass {
+    @KafkaHandler
+    public void listen(String str) {
+
+    }
+
+    @KafkaHandler
+    public void listen(Integer integer) {
+
+    }
+
+}
+
+```
+
+#### 异常处理器KafkaListenerErrorHandler :
+
+KafkaListener 中抛出的异常都会经过KafkaListenerErrorHandler 异常处理，spring-kafka 提供了ConsumerAwareListenerErrorHandler 的子接口，注册
+这个类型中的bean 即可：
+
+```java
+
+      @Bean
+       public ConsumerAwareErrorHandler consumerAwareErrorHandler(){
+        return new ConsumerAwareErrorHandler(){
+       @Override
+       public void handle(Exception thrownException,ConsumerRecord<?, ?> data,Consumer<?, ?> consumer){
+        log.info("Consumer Error Handler receive"+data.toString());
+        }
+        };
+        }
+```
 
 ## 3).ZT  kafka 封装包的设计及使用：
 

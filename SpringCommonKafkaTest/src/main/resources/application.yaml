@@ -1,0 +1,11 @@
+﻿csdc:
+  kafka:
+    topic:
+      topicConfigMap:
+        renpengcheng:
+          topicPartition: 30
+          topicReplication: 3
+
+spring:
+  kafka:
+    bootstrap-servers:${ZT_KAFKA_HOST:172.20.10.8:9092}

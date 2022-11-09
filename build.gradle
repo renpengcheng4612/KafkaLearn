@@ -48,9 +48,12 @@ subprojects {
 
 
     dependencies {
+        implementation 'org.projectlombok:lombok:1.18.20'
+
+
         implementation 'commons-pool:commons-pool:1.5.4'
         implementation 'io.opentracing.contrib:opentracing-spring-jaeger-web-starter:3.3.1'
-        //compileonly 'org.projectlombok:lombok:1.18.10'
+        compileonly 'org.projectlombok:lombok:1.18.10'
 
         annotationProcessor 'org.projectlombok:lombok:1.18.10'
         testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'

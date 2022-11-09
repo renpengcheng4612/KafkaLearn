@@ -18,22 +18,21 @@ public class KafkaTest {
     public void testTopic() {
         Set<String> topics = listTopic(KafkaPropertiesEnum.BOOTSTRAP_SERVERS_CONFIG_VALUE_1.getValue());
         System.out.println(topics.toString());
-
         boolean topic = createTopic(KafkaPropertiesEnum.BOOTSTRAP_SERVERS_CONFIG_VALUE_1.getValue(), "4a", 3, (short) 3);
-        boolean b = containTopic(KafkaPropertiesEnum.BOOTSTRAP_SERVERS_CONFIG_VALUE_1.getValue(), "4a");
-
-        System.out.println("------------------------------´´½¨topicsºó--------------------------------------");
+        boolean result = containTopic(KafkaPropertiesEnum.BOOTSTRAP_SERVERS_CONFIG_VALUE_1.getValue(), "4a");
+        System.out.println("--------------åˆ›å»ºæ˜¯å¦æˆåŠŸ-----------------" + result);
+        System.out.println("--------------åˆ›å»ºtopicså-----------------");
         Set<String> newTopics = listTopic(KafkaPropertiesEnum.BOOTSTRAP_SERVERS_CONFIG_VALUE_1.getValue());
         System.out.println(newTopics.toString());
     }
 
     /**
-     * ´´½¨topic
+     * åˆ›å»ºtopic
      *
-     * @param bootstrapServers kafka¼¯ÈºµØÖ·  12.12.12.12:9092;12.12.12.10:9092;12.12.12.11:9092
-     * @param topicName        topicµÄÃû³Æ
-     * @param partitions       ·ÖÇøÊı
-     * @param replication      ¸±±¾Êı
+     * @param bootstrapServers kafkaé›†ç¾¤åœ°å€  12.12.12.12:9092;12.12.12.10:9092;12.12.12.11:9092
+     * @param topicName        topicçš„åç§°
+     * @param partitions       åˆ†åŒºæ•°
+     * @param replication      å‰¯æœ¬æ•°
      */
     public static boolean createTopic(String bootstrapServers, String topicName, int partitions, short replication) {
         Properties properties = new Properties();
@@ -99,10 +98,10 @@ public class KafkaTest {
     }
 
     /**
-     * ²éÑ¯topicÊÇ·ñ´æÔÚ
+     * æŸ¥è¯¢topicæ˜¯å¦å­˜åœ¨
      *
-     * @param bootstrapServers kafka¼¯ÈºµØÖ· kafka¼¯ÈºµØÖ·
-     * @param topicName        topicÃû³Æ
+     * @param bootstrapServers kafkaé›†ç¾¤åœ°å€ kafkaé›†ç¾¤åœ°å€
+     * @param topicName        topicåç§°
      * @return boolean
      */
     public static boolean containTopic(String bootstrapServers, String topicName) {
@@ -116,7 +115,7 @@ public class KafkaTest {
             adminClient = KafkaAdminClient.create(properties);
             DescribeTopicsResult describeTopicsResult = adminClient.describeTopics(Lists.newArrayList(topicName));
             if (describeTopicsResult.values().values().isEmpty()) {
-                System.out.println("ÕÒ²»µ½ÃèÊöĞÅÏ¢");
+                System.out.println("æ‰¾ä¸åˆ°æè¿°ä¿¡æ¯");
             } else {
                 for (KafkaFuture<TopicDescription> value : describeTopicsResult.values().values()) {
                     System.out.println(value);
